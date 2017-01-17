@@ -9,8 +9,8 @@
   <body>
     <div class="main-container">
       <div class="list-of-locations">
-        <input type="text" data-bind="textInput: filterText, event: {input: filterMarker}">
-        <ul data-bind="foreach: locationItems">
+        <input type="text" placeholder="filter..." data-bind="textInput: filterText, event: {input: filterMarker}">
+        <ul class="location-items" data-bind="foreach: locationItems">
           <li data-bind="text: title, click: $parent.focusMarker, attr: {class: itemClass}"></li>
         </ul>
       </div>

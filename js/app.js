@@ -1,45 +1,45 @@
 function initMap() {
 
   // neighborhood that I am interested in
-  var neighborhoodLatLng = { lat: 49.130593, lng: 9.209632 };
+  var neighborhoodLatLng = { lat: 39.916345, lng: 116.397155 };
 
   // and 9 locations
   var locations = [
     {
-      title: 'Heilbronn University',
-      pos: {lat: 49.12259, lng: 9.210835}
+      title: 'Forbidden City',
+      pos: {lat: 39.916345, lng: 116.397155}
     },
     {
-      title: 'OBI Markt Heilbronn-Schwabenhof',
-      pos: {lat: 49.122947, lng: 9.2206}
+      title: 'National Museum of China',
+      pos: {lat: 39.905124, lng: 116.400484}
     },
     {
-      title: 'China Restaurant Hongkong',
-      pos: {lat: 49.13782, lng: 9.20914}
+      title: 'Zhongshan Park',
+      pos: {lat: 39.911788, lng: 116.394813}
     },
     {
-      title: 'Wertwiesenpark',
-      pos: {lat: 49.130264, lng: 9.202187}
+      title: 'Nanluoguxiang',
+      pos: {lat: 39.937087, lng: 116.403148}
     },
     {
-      title: 'ASV Biergarten am Park',
-      pos: {lat: 49.12709, lng: 9.199}
+      title: 'ShiChaHai',
+      pos: {lat: 39.933925, lng: 116.392386}
     },
     {
-      title: 'Heilbronn Hauptbahnhof',
-      pos: {lat: 49.142613, lng: 9.208512}
+      title: 'Xidan JoyCity',
+      pos: {lat: 39.910839, lng: 116.373093}
     },
     {
-      title: 'Media Markt Heilbronn',
-      pos: {lat: 49.148903, lng: 9.212966}
+      title: 'Gongren Stadium',
+      pos: {lat: 39.9291, lng: 116.44327}
     },
     {
-      title: 'Rathaus mit astronom. Uhr',
-      pos: {lat: 49.142506, lng: 9.2184}
+      title: 'Ditan Park',
+      pos: {lat: 39.952876, lng: 116.416069}
     },
     {
-      title: 'Oralchirurgie Dr. Troßbach',
-      pos: {lat: 49.14112, lng: 9.22468}
+      title: 'Temple of Heaven',
+      pos: {lat: 39.883738, lng: 116.412934}
     }
   ];
 
@@ -55,6 +55,19 @@ function initMap() {
   // viewModel: contains markers
   var viewModel = function() {
     var self = this;
+
+    // show infowindow about some marker when user clicks on it
+    self.showInfoWindow = function() {
+      var imgSrc = 'http://maps.googleapis.com/maps/api/streetview?size=200x150&location='
+                    + this.position.lat() + ',' + this.position.lng();
+      var InfoWindowPos = this.position;
+      var InfoWindowContent = '<IMG BORDER="0" ALIGN="Middle" SRC=' + imgSrc + '>';
+      var singleInfoWindow = new google.maps.InfoWindow({
+        position: InfoWindowPos,
+        content: InfoWindowContent
+      });
+      singleInfoWindow.open(map, this);
+    };
 
     // create markers in ViewModel
     self.markers = ko.observableArray([]);
@@ -72,6 +85,8 @@ function initMap() {
       bounds.extend(singleMarker.position);
       map.fitBounds(bounds);
 
+      singleMarker.addListener('click', self.showInfoWindow);
+
       var singleLocationItem = {
         title: ko.observable(singleLocation.title),
         itemClass: ko.observable('show-item')
@@ -83,7 +98,6 @@ function initMap() {
     self.filterText = ko.observable('');
 
     self.filterMarker = function() {
-      console.log('ok');
       for (var i = 0; i < self.markers().length; i++) {
         var singleMarker = self.markers()[i];
         if (singleMarker.title.indexOf(self.filterText()) === -1) {
@@ -112,6 +126,7 @@ function initMap() {
         };
       };
     };
+
   };
 
   ko.applyBindings(new viewModel());
